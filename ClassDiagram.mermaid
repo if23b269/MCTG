@@ -39,6 +39,12 @@ classDiagram
     class SpellCard {
     }
 
+    class Session {
+        +int id;
+        +User user;
+        +String token;
+    }
+
     class Package {
         +List<Card> cards
         +int price = 5
@@ -80,6 +86,7 @@ Battle "1" o-- "2" User : participants
 %%Trading "1" o-- "1" Card : offers
 %%Trading "1" o-- "1" Requirements : based on
 Game "1" o-- "*" User
+User "1" .. "1" Session
 Game "1" o-- "*" Card: trade
 Card "1" o-- "1" ElementType : assigned
 Card <|-- MonsterCard
