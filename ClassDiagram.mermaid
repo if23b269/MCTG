@@ -1,0 +1,86 @@
+classDiagram
+    class User {
+        +String username
+        +String password
+        +int coins
+        +List<Card> cards
+        +Deck deck
+        +List<Card> stack
+        +int elo
+        +register()
+        +login()
+        +manageCards()
+        +acquirePackage()
+        +defineDeck()
+        +battle(opponent: User)
+        +compareStats()
+        +tradeCard(card: Card, requirements)
+        +addCardToStack(card: Card)
+        +removeCardFromStack(card: Card)
+        +pushCardtoStore(card: Card)
+    }
+
+    class Game {
+        List<User> users
+        List<Card> store
+    }
+
+    class Card {
+        +String name
+        +int damage
+        +ElementType elementType
+        +getDamage()
+        +isEffectiveAgainst(opponentCard: Card)
+    }
+
+    class MonsterCard {
+    }
+
+    class SpellCard {
+    }
+
+    class Package {
+        +List<Card> cards
+        +int price = 5
+        +getCards()
+    }
+
+    class Deck {
+        +List<Card> selectedCards
+        +selectCard(card: Card)
+        +removeCard(card: Card)
+    }
+
+    class Battle {
+        +User player1
+        +User player2
+        +int roundLimit = 100
+        +battle()
+        +roundOutcome(card1: Card, card2: Card)
+    }
+
+    class Scoreboard {
+        +List<User> users
+        +updateStats(user: User)
+        +display()
+    }
+
+    class ElementType {
+        +String type
+        +isEffectiveAgainst(opponent: ElementType)
+    }
+
+User "1" o-- "*" Deck : uses
+User "1" o-- "*" Package : can acquire
+User "1" o-- "1" Scoreboard : has
+%%Stack "1" o-- "*" Card : contains
+Deck "1" o-- "*" Card : consists of
+User "1" ..> "1" Battle : engages in
+Battle "1" o-- "2" User : participants
+%%Trading "1" o-- "1" Card : offers
+%%Trading "1" o-- "1" Requirements : based on
+Game "1" o-- "*" User
+Game "1" o-- "*" Card: trade
+Card "1" o-- "1" ElementType : assigned
+Card <|-- MonsterCard
+Card <|-- SpellCard
