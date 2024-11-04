@@ -16,9 +16,9 @@ public class UserController extends Controller {
     private UserData userDAL;
 
     public UserController() {
-
-        // Nur noch für die Dummy-JUnit-Tests notwendig. Stattdessen ein RepositoryPattern verwenden.
         this.userDAL = new UserData();
+        // Nur noch für die Dummy-JUnit-Tests notwendig. Stattdessen ein RepositoryPattern verwenden.
+
     }
 
     // GET /user(:username
@@ -46,7 +46,7 @@ public class UserController extends Controller {
     // GET /weather
     public Response getUsers() {
         try {
-            List<User> userData = this.userDAL.getUsers();
+            List<User> userData = this.userDAL.getUserData();
             // "[ { \"id\": 1, \"city\": \"Vienna\", \"temperature\": 9.0 }, { ... }, { ... } ]"
             String userDataJSON = this.getObjectMapper().writeValueAsString(userData);
 
@@ -71,7 +71,17 @@ public class UserController extends Controller {
 
             // request.getBody() => "{ \"id\": 4, \"city\": \"Graz\", ... }
             User user = this.getObjectMapper().readValue(request.getBody(), User.class);
+            //List<User> users = this.getUserDAL().getUserData();
+            //users.add(user);
+            /*for (int i = 0; i < users.size(); i++) {
+                System.out.println(users.get(i).getUsername());
+            }*/
+            /*UserData userData = this.getUserDAL();
+            userData.addUser(user);
+            userData.setUserData(userData.getUserData());
+            this.setUserDAL(userData);*/
             this.userDAL.addUser(user);
+
 
             return new Response(
                     HttpStatus.CREATED,
@@ -140,5 +150,13 @@ public class UserController extends Controller {
         out.write("\r\n");
         out.write("405 - Method Not Allowed");
         out.flush();
+    }
+
+    public UserData getUserDAL() {
+        return userDAL;
+    }
+
+    public void setUserDAL(UserData userDAL) {
+        this.userDAL = userDAL;
     }
 }

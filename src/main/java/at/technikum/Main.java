@@ -20,8 +20,9 @@ public class Main {
     private static Router configureRouter()
     {
         Router router = new Router();
-        router.addService("/users", new UserService());
-        router.addService("/sessions", new SessionService());
+        UserService userService = new UserService();
+        router.addService("/users", userService);
+        router.addService("/sessions", new SessionService(userService));
 
         return router;
     }

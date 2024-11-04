@@ -33,4 +33,8 @@ public class UserService implements Service {
                 "[]"
         );
     }
+
+    public UserController getUserController() {
+        return userController;
+    }
 }

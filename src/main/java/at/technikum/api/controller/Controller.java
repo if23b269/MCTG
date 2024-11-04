@@ -1,5 +1,7 @@
 package at.technikum.api.controller;
 
+import at.technikum.DAL.SessionData;
+import at.technikum.DAL.UserData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Controller {

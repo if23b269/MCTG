@@ -1,6 +1,7 @@
 package at.technikum.service;
 
 import at.technikum.api.controller.SessionController;
+import at.technikum.api.controller.UserController;
 import at.technikum.httpserver.http.ContentType;
 import at.technikum.httpserver.http.HttpStatus;
 import at.technikum.httpserver.http.Method;
@@ -10,9 +11,11 @@ import at.technikum.httpserver.server.Service;
 
 public class SessionService implements Service {
     private final SessionController sessionController;
+    private final UserService userService;
 
-    public SessionService() {
+    public SessionService(UserService userService) {
         this.sessionController = new SessionController();
+        this.userService = userService;
     }
 
     @Override
@@ -24,7 +27,7 @@ public class SessionService implements Service {
             //return this.sessionController.getWeatherPerRepository();
             //return this.weatherController.getWeatherPerRepository();
         } else if (request.getMethod() == Method.POST) {
-            return this.sessionController.addSession(request);
+            return this.sessionController.addSession(request, this.userService.getUserController().getUserDAL().getUsers());
         }
 
         return new Response(

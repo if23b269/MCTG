@@ -38,4 +38,12 @@ public class UserData {
         }
         this.userData.add(user);
     }
+
+    public List<User> getUserData() {
+        return userData;
+    }
+
+    public void setUserData(List<User> userData) {
+        this.userData = userData;
+    }
 }
