@@ -34,4 +34,9 @@ public class Response {
                 "\r\n" +
                 this.content;
     }
+
+    @Override
+    public String toString() {
+        return this.content;
+    }
 }
