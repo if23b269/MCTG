@@ -1,24 +1,26 @@
 package at.technikum.api.controller;
 
 import at.technikum.DAL.DAO.User;
-import at.technikum.DAL.SessionData;
+import at.technikum.DAL.SessionHandler;
 import at.technikum.httpserver.http.ContentType;
 import at.technikum.httpserver.http.HttpStatus;
 import at.technikum.httpserver.server.Request;
 import at.technikum.httpserver.server.Response;
 import at.technikum.httpserver.server.Session;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import lombok.Getter;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.*;
 
 public class SessionController extends Controller {
-    private SessionData sessionData;
+    @Getter
+    private SessionHandler sessionsessionHandler;
     private final String SECRET_KEY = "B4EFA2836BDED9533BA6E7AD51C4A";
 
     public SessionController() {
-        this.sessionData = new SessionData();
+        this.sessionsessionHandler = new SessionHandler();
         // Nur noch für die Dummy-JUnit-Tests notwendig. Stattdessen ein RepositoryPattern verwenden.
 
     }
@@ -40,8 +42,9 @@ public class SessionController extends Controller {
             //JSON Web Token
             //String token = generateJWT(user.getUsername());
             String token = "mtcgToken";
-            Session session = new Session(user, token);
-            this.sessionData.addSession(session);
+            Session session = new Session(user, user.getUsername()+ "-" + token);
+            System.out.println(user);
+            this.sessionsessionHandler.addSession(session);
 
 
             return new Response(

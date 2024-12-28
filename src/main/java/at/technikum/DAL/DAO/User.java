@@ -1,11 +1,18 @@
 package at.technikum.DAL.DAO;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
+import lombok.*;
+
 
 import java.util.List;
 import java.util.Objects;
 
+@Data
+@Setter
+@Getter
 public class User {
+
+    private Long id;
     @JsonAlias({"Username"})
     private String username;
     @JsonAlias({"Password"})
@@ -45,6 +52,16 @@ public class User {
     }
     // Jackson needs the default constructor
     public User() {
+    }
+
+    public User(long id, String username, String password) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+    }
+
+    //UserDao!!
+    public User(int anInt, String string, String string1, String string2) {
     }
 
     // Getters and Setters

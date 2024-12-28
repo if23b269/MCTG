@@ -1,15 +1,22 @@
 package at.technikum.httpserver.server;
 
 import at.technikum.DAL.DAO.User;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Objects;
 
+@Setter
+@Getter
 public class Session {
-    private int id;
+
+    private Long id;
+    @Getter
     private User user;
     private String token;
+    private boolean admin;
 
-    public Session(int id, User user, String token) {
+    public Session(Long id, User user, String token) {
         this.id = id;
         this.user = user;
         this.token = token;
@@ -22,10 +29,6 @@ public class Session {
     }
 
     public Session() {
-    }
-
-    public User getUser() {
-        return user;
     }
 
     @Override

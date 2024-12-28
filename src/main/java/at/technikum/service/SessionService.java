@@ -1,13 +1,14 @@
 package at.technikum.service;
 
 import at.technikum.api.controller.SessionController;
-import at.technikum.api.controller.UserController;
 import at.technikum.httpserver.http.ContentType;
 import at.technikum.httpserver.http.HttpStatus;
 import at.technikum.httpserver.http.Method;
 import at.technikum.httpserver.server.Request;
 import at.technikum.httpserver.server.Response;
 import at.technikum.httpserver.server.Service;
+
+import java.util.UUID;
 
 public class SessionService implements Service {
     private final SessionController sessionController;
