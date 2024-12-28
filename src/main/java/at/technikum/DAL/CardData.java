@@ -16,7 +16,7 @@ public class CardData {
     }
 
     // GET /weather/:id
-    public Card getCard(Integer ID) {
+    public Card getCard(Long ID) {
         Card foundCard = cardData.stream()
                 .filter(card -> ID == card.getId())
                 .findAny()
