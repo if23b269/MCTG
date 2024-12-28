@@ -1,0 +1,68 @@
+classDiagram
+    direction BT
+    class ContentType {
+        <<enumeration>>
+        + values() ContentType[]
+        + valueOf(String) ContentType
+    }
+    class HeaderMap {
+        + getHeader(String) String
+        + ingest(String) void
+        + print() void
+        int contentLength
+    }
+    class HttpStatus {
+        <<enumeration>>
+        + values() HttpStatus[]
+        + valueOf(String) HttpStatus
+    }
+    class Method {
+        <<enumeration>>
+        + valueOf(String) Method
+        + values() Method[]
+    }
+    class Request {
+        - String pathname
+        - Method method
+        - String body
+        - String params
+        - String urlContent
+        - HeaderMap headerMap
+        - List~String~ pathParts
+        String pathname
+        String serviceRoute
+        String params
+        HeaderMap headerMap
+        List~String~ pathParts
+        String urlContent
+        String body
+        Method method
+    }
+    class RequestBuilder {
+        + buildRequest(BufferedReader) Request
+        - setPathname(Request, String) void
+        - getMethod(String) Method
+    }
+    class RequestHandler {
+        + run() void
+    }
+    class Response {
+        + get() String
+    }
+    class Router {
+        + addService(String, Service) void
+        + resolve(String) Service
+        + removeService(String) void
+    }
+    class Server {
+        + start() void
+    }
+    class Service {
+        <<Interface>>
+        + handleRequest(Request) Response
+    }
+    class Session {
+        - User user
+        + equals(Object) boolean
+        User user
+    }
