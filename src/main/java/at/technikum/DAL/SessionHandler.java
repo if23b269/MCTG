@@ -1,6 +1,5 @@
 package at.technikum.DAL;
 
-import at.technikum.DAL.DAO.User;
 import at.technikum.httpserver.server.Session;
 import at.technikum.persistence.dao.Dao;
 import at.technikum.persistence.dao.SessionDao;
@@ -8,7 +7,6 @@ import at.technikum.persistence.dao.SessionDao;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 
 public class SessionHandler {
     private List<Session> sessions;

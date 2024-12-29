@@ -28,7 +28,7 @@ public class SessionService implements Service {
             //return this.sessionController.getWeatherPerRepository();
             //return this.weatherController.getWeatherPerRepository();
         } else if (request.getMethod() == Method.POST) {
-            return this.sessionController.addSession(request, this.userService.getUserController().getUserDAL().getUsers());
+            return this.sessionController.addSession(request, this.userService.getUserController().getUserDao().getAll());
         }
 
         return new Response(

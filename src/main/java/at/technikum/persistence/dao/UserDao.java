@@ -4,10 +4,7 @@ import at.technikum.DAL.DAO.User;
 import at.technikum.persistence.DbConnection;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 public class UserDao implements Dao<User> {
 
@@ -93,7 +90,7 @@ public class UserDao implements Dao<User> {
 
     //                SELECT id, username, password, token
     @Override
-    public Collection<User> getAll() {
+    public List<User> getAll() {
         ArrayList<User> result = new ArrayList<>();
         try ( PreparedStatement statement = DbConnection.getInstance().prepareStatement("""
                 SELECT id, username, password
@@ -115,9 +112,7 @@ public class UserDao implements Dao<User> {
         return result;
     }
 
-    //                (id, username, password, token)
-    @Override
-    public void save(User user) {
+    public void saveWithId(User user) {
         try ( PreparedStatement statement = DbConnection.getInstance().prepareStatement("""
                 INSERT INTO users 
                 (id, username, password) 
@@ -127,6 +122,24 @@ public class UserDao implements Dao<User> {
             statement.setLong(1, user.getId());
             statement.setString(2, user.getUsername());
             statement.setString(3, user.getPassword());
+            //statement.setString(4, user.getToken());
+            statement.execute();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    //                (id, username, password, token)
+    @Override
+    public void save(User user) {
+        try ( PreparedStatement statement = DbConnection.getInstance().prepareStatement("""
+                INSERT INTO users 
+                (username, password) 
+                VALUES (?, ?);
+                """ )
+        ) {
+            statement.setString(1, user.getUsername());
+            statement.setString(2, user.getPassword());
             //statement.setString(4, user.getToken());
             statement.execute();
         } catch (SQLException throwables) {

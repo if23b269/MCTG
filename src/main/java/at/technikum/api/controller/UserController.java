@@ -6,17 +6,21 @@ import at.technikum.httpserver.http.ContentType;
 import at.technikum.httpserver.http.HttpStatus;
 import at.technikum.httpserver.server.Request;
 import at.technikum.httpserver.server.Response;
+import at.technikum.persistence.dao.UserDao;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import lombok.Getter;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class UserController extends Controller {
-    private UserData userDAL;
+    @Getter
+    private UserDao userDao;
 
     public UserController() {
-        this.userDAL = new UserData();
+        this.userDao = new UserDao();
         // Nur noch für die Dummy-JUnit-Tests notwendig. Stattdessen ein RepositoryPattern verwenden.
 
     }
@@ -25,7 +29,7 @@ public class UserController extends Controller {
     public Response getUser(String username)
     {
         try {
-            User userData = this.userDAL.getUser(username);
+            User userData = this.userDao.getByUsername(username).get();
             // "[ { \"id\": 1, \"city\": \"Vienna\", \"temperature\": 9.0 }, { ... }, { ... } ]"
             String userDataJSON = this.getObjectMapper().writeValueAsString(userData);
 
@@ -41,12 +45,19 @@ public class UserController extends Controller {
                     ContentType.JSON,
                     "{ \"message\" : \"Internal Server Error\" }"
             );
+        }catch (NoSuchElementException e) {
+            e.printStackTrace();
+            return new Response(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    ContentType.JSON,
+                    "{ \"message\" : \"Internal DB Error\" }"
+            );
         }
     }
     // GET /weather
     public Response getUsers() {
         try {
-            List<User> userData = this.userDAL.getUserData();
+            List<User> userData = this.userDao.getAll();
             // "[ { \"id\": 1, \"city\": \"Vienna\", \"temperature\": 9.0 }, { ... }, { ... } ]"
             String userDataJSON = this.getObjectMapper().writeValueAsString(userData);
 
@@ -68,7 +79,7 @@ public class UserController extends Controller {
     // POST /weather
     public Response addUser(Request request) {
         try {
-
+            List<User> userData = this.userDao.getAll();
             // request.getBody() => "{ \"id\": 4, \"city\": \"Graz\", ... }
             User user = this.getObjectMapper().readValue(request.getBody(), User.class);
             //List<User> users = this.getUserDAL().getUserData();
@@ -80,7 +91,11 @@ public class UserController extends Controller {
             userData.addUser(user);
             userData.setUserData(userData.getUserData());
             this.setUserDAL(userData);*/
-            this.userDAL.addUser(user);
+            if(userData.contains(user)) {
+                throw new IllegalArgumentException("User already exists");
+            }
+
+            this.userDao.save(user);
 
 
             return new Response(
@@ -150,13 +165,5 @@ public class UserController extends Controller {
         out.write("\r\n");
         out.write("405 - Method Not Allowed");
         out.flush();
-    }
-
-    public UserData getUserDAL() {
-        return userDAL;
-    }
-
-    public void setUserDAL(UserData userDAL) {
-        this.userDAL = userDAL;
     }
 }

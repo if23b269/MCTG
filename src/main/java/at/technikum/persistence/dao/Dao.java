@@ -18,6 +18,7 @@ public interface Dao<T> {
 
     // CREATE
     void save(T t);
+    void saveWithId(T t);
 
     // UPDATE
     void update(T t, String[] params);

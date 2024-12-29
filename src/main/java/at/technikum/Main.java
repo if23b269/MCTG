@@ -34,7 +34,7 @@ public class Main {
             User user2 = getUser(2);
             dao.delete(user2);
             //dao.save(new User(2,"Jane Doe", "pw", "mySecret"));
-            dao.save(new User(2,"Jane Doe", "pw"));
+            dao.saveWithId(new User(2,"Jane Doe", "pw"));
 
             dao.getAll().forEach(System.out::println);
 

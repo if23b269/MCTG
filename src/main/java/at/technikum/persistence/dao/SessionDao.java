@@ -86,6 +86,11 @@ public class SessionDao implements Dao<Session> {
     }
 
     @Override
+    public void saveWithId(Session session) {
+
+    }
+
+    @Override
     public void update(Session session, String[] params) {
         // update the item
         session.setId(Long.parseLong(Objects.requireNonNull( params[0], "ObjectId cannot be null" )));
