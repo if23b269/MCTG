@@ -1,5 +1,6 @@
 package at.technikum.service;
 
+import at.technikum.api.controller.PackageController;
 import at.technikum.api.controller.SessionController;
 import at.technikum.httpserver.http.ContentType;
 import at.technikum.httpserver.http.HttpStatus;
@@ -12,11 +13,11 @@ import java.util.UUID;
 
 public class PackageService implements Service {
     private final SessionController sessionController;
-    private final UserService userService;
+    private final PackageController packageController;
 
-    public PackageService(UserService userService) {
+    public PackageService() {
         this.sessionController = new SessionController();
-        this.userService = userService;
+        this.packageController = new PackageController();
     }
 
     @Override
@@ -46,11 +47,12 @@ public class PackageService implements Service {
                     );
                 }
                 case 0 -> {
-                    return new Response(
+                    /*return new Response(
                             HttpStatus.CREATED,
                             ContentType.JSON,
                             "{ \"message\" : \"CREATED\" }"
-                    );
+                    );*/
+                    return this.packageController.addPackage(request);
                 }
             }
         }

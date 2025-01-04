@@ -10,15 +10,15 @@ public class CardData {
 
     public CardData() {
         cardData = new ArrayList<>();
-        cardData.add(new Card(0,"Card1",50));
-        cardData.add(new Card(1,"Card2",50));
-        cardData.add(new Card(2,"Card3",50));
+        cardData.add(new Card("0","Card1",50.0));
+        cardData.add(new Card("1","Card2",50.0));
+        cardData.add(new Card("2","Card3",50.0));
     }
 
     // GET /weather/:id
-    public Card getCard(Long ID) {
+    public Card getCard(String ID) {
         Card foundCard = cardData.stream()
-                .filter(card -> ID == card.getId())
+                .filter(card -> ID.equals(card.getId()))
                 .findAny()
                 .orElse(null);
 

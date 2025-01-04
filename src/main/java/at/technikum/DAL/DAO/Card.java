@@ -1,46 +1,25 @@
 package at.technikum.DAL.DAO;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
+@Getter
+@Setter
 public class Card {
-    @JsonAlias({"id"})
-    private Long id;
-    @JsonAlias({"name"})
+    @JsonAlias({"Id"})
+    private String id;
+    @JsonAlias({"Name"})
     private String name;
-    @JsonAlias({"damage"})
-    private int damage;
+    @JsonAlias({"Damage"})
+    private Double damage;
 
     // Constructor
-    public Card(int id, String name, int damage) {
-        this.id = Long.valueOf(id);
+    public Card(String id, String name, Double damage) {
+        this.id = id;
         this.name = name;
-        this.damage = damage;
-    }
-    public Long getId() { return id; }
-
-    // Getter for name
-    public String getName() {
-        return name;
-    }
-
-    // Setter for name
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    // Getter for damage
-    public int getDamage() {
-        return damage;
-    }
-
-    // Setter for damage
-    public void setDamage(int damage) {
         this.damage = damage;
     }
 
