@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 
 @Getter
 public class PackageController extends Controller {
@@ -27,10 +28,10 @@ public class PackageController extends Controller {
     }
 
     // GET /card(:username
-    public Response getCard(String username)
+    public Response getPackage(String uuid)
     {
         try {
-            Package packageData = this.packageDao.getByUsername(username).get();
+            Package packageData = this.packageDao.getByUsername(uuid).get();
             // "[ { \"id\": 1, \"city\": \"Vienna\", \"temperature\": 9.0 }, { ... }, { ... } ]"
             String userDataJSON = this.getObjectMapper().writeValueAsString(packageData);
 
@@ -96,14 +97,24 @@ public class PackageController extends Controller {
             if(packageData.contains(apackage)) {
                 throw new IllegalArgumentException("Package already exists");
             }*/
-            Package apackage = new Package("1"+new Date().toString(),cards, 20.0);
+            //"1"+new Date().toString()
+
+            if (cards.size() != 5) {
+                return new Response(
+                        HttpStatus.CONFLICT,
+                        ContentType.JSON,
+                        "{ \"message\": \""+ "a pack must consist of 5 cards" + "\" }"
+                );
+            }
+
+            Package apackage = new Package(UUID.randomUUID().toString(),cards,5.0);
             this.packageDao.save(apackage);
 
 
             return new Response(
                     HttpStatus.CREATED,
                     ContentType.JSON,
-                    "{ message: \"Success\" }"
+                    "{ \"message\": \"Success\" }"
             );
         } catch (JsonProcessingException e) {
             e.printStackTrace();
@@ -111,7 +122,7 @@ public class PackageController extends Controller {
             return new Response(
                     HttpStatus.CONFLICT,
                     ContentType.JSON,
-                    "{ message: \""+ e.getMessage() + "\" }"
+                    "{ \"message\": \""+ e.getMessage() + "\" }"
             );
         } catch (IOException e) {
             throw new RuntimeException(e);

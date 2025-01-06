@@ -43,14 +43,13 @@ public class SessionController extends Controller {
             //String token = generateJWT(user.getUsername());
             String token = "mtcgToken";
             Session session = new Session(user, user.getUsername()+ "-" + token);
-            System.out.println(user);
             this.sessionsessionHandler.addSession(session);
 
 
             return new Response(
                     HttpStatus.OK,
                     ContentType.JSON,
-                    "{ message: \"Success - with generated token for the user, here: " + user.getUsername() + "-" + token + "\" }"
+                    "{ \"message\": \"Success - with generated token for the user, here: " + user.getUsername() + "-" + token + "\" }"
             );
         } catch (JsonProcessingException e) {
             e.printStackTrace();
@@ -58,7 +57,7 @@ public class SessionController extends Controller {
             return new Response(
                     HttpStatus.CONFLICT,
                     ContentType.JSON,
-                    "{ message: \""+ e.getMessage() + "\" }"
+                    "{ \"message\": \""+ e.getMessage() + "\" }"
             );
         }
 

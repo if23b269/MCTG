@@ -14,6 +14,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 public class UserController extends Controller {
     @Getter
@@ -101,7 +102,7 @@ public class UserController extends Controller {
             return new Response(
                     HttpStatus.CREATED,
                     ContentType.JSON,
-                    "{ message: \"Success\" }"
+                    "{ \"message\": \"Success\" }"
             );
         } catch (JsonProcessingException e) {
             e.printStackTrace();
@@ -109,7 +110,7 @@ public class UserController extends Controller {
             return new Response(
                     HttpStatus.CONFLICT,
                     ContentType.JSON,
-                    "{ message: \""+ e.getMessage() + "\" }"
+                    "{ \"message\": \""+ e.getMessage() + "\" }"
             );
         }
 
@@ -165,5 +166,35 @@ public class UserController extends Controller {
         out.write("\r\n");
         out.write("405 - Method Not Allowed");
         out.flush();
+    }
+
+    public Response deleteUser(String username) {
+        try {
+            Optional<User> userO = this.userDao.getByUsername(username);
+            if (userO.isPresent()) {
+                this.userDao.delete(userO.get());
+            } else {
+                throw new IllegalArgumentException("User does not exist");
+            }
+            return new Response(
+                    HttpStatus.OK,
+                    ContentType.JSON,
+                    "{ \"message\" : \"success\" }"
+            );
+        }catch (NoSuchElementException e) {
+            e.printStackTrace();
+            return new Response(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    ContentType.JSON,
+                    "{ \"message\" : \"Internal DB Error\" }"
+            );
+        }catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            return new Response(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    ContentType.JSON,
+                    "{ \"message\" : \""+ e.getMessage() + "\" }"
+            );
+        }
     }
 }

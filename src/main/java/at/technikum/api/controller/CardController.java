@@ -100,7 +100,7 @@ public class CardController extends Controller {
             return new Response(
                     HttpStatus.CREATED,
                     ContentType.JSON,
-                    "{ message: \"Success\" }"
+                    "{ \"message\": \"Success\" }"
             );
         } catch (JsonProcessingException e) {
             e.printStackTrace();
@@ -108,7 +108,7 @@ public class CardController extends Controller {
             return new Response(
                     HttpStatus.CONFLICT,
                     ContentType.JSON,
-                    "{ message: \""+ e.getMessage() + "\" }"
+                    "{ \"message\": \""+ e.getMessage() + "\" }"
             );
         }
 
