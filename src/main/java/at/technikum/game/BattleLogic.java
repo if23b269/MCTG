@@ -45,6 +45,11 @@ public class BattleLogic {
             System.out.println(roundCount + ": " + result);
 
             if (deck1.isEmpty() || deck2.isEmpty()) {
+                if (deck1.isEmpty()) {
+                    System.out.println(user1.getName() + " won!");
+                } else {
+                    System.out.println(user2.getName() + " won!");
+                }
                 break;
             }
         }

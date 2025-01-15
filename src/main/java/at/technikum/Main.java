@@ -46,7 +46,23 @@ public class Main {
 
             //dao.getAll().forEach(System.out::println);
 
+            Card[] cards = new Card[]{
+                    new Card("001", "Flame Dragon", 50.5, CardType.MONSTER, ElementType.FIRE, MonsterType.DRAGON),
+                    new Card("002", "Thunder Beast", 45.0, CardType.SPELL, ElementType.WATER, MonsterType.ORK),
+                    new Card("003", "Ocean Serpent", 30.0, CardType.MONSTER, ElementType.WATER, MonsterType.KRAKEN),
+                    new Card("004", "Earth Golem", 40.0, CardType.SPELL, ElementType.NORMAL, MonsterType.KRAKEN),
+                    new Card("005", "Wind Griffin", 35.0, CardType.MONSTER, ElementType.WATER, MonsterType.KRAKEN),
+                    new Card("006", "Dark Phoenix", 60.0, CardType.SPELL, ElementType.NORMAL, MonsterType.KRAKEN),
+                    new Card("007", "Light Angel", 25.5, CardType.MONSTER, ElementType.WATER, MonsterType.KRAKEN),
+                    new Card("008", "Stone Giant", 70.0, CardType.SPELL, ElementType.NORMAL, MonsterType.KRAKEN)
+            };
+            Deck deck1 = new Deck(List.of(cards[0], cards[1], cards[2], cards[3]));
+            Deck deck2 = new Deck(List.of(cards[4], cards[5], cards[6], cards[7]));
 
+            User user1 = new User(1L, "dragonMaster", "dragon123", "John Doe", 1500, deck1, 1200, "A master of dragons", "image1.png");
+            User user2 = new User(2L, "beastKing", "beast456", "Jane Smith", 1200, deck2, 1100, "King of beasts", "image2.png");
+
+            System.out.println(BattleLogic.battle(user1, user2));
 
             server.start();
         } catch (IOException e) {
