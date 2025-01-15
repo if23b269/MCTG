@@ -29,8 +29,14 @@ public class UserController extends Controller {
     // GET /user(:username
     public Response getUser(String username)
     {
+        User userData;
         try {
-            User userData = this.userDao.getByUsername(username).get();
+            Optional<User> userO = this.userDao.getByUsername(username);
+            if (userO.isPresent()) {
+                userData = userO.get();
+            } else {
+                throw new IllegalArgumentException("User does not exist");
+            }
             // "[ { \"id\": 1, \"city\": \"Vienna\", \"temperature\": 9.0 }, { ... }, { ... } ]"
             String userDataJSON = this.getObjectMapper().writeValueAsString(userData);
 
@@ -52,6 +58,13 @@ public class UserController extends Controller {
                     HttpStatus.INTERNAL_SERVER_ERROR,
                     ContentType.JSON,
                     "{ \"message\" : \"Internal DB Error\" }"
+            );
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            return new Response(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    ContentType.JSON,
+                    "{ \"message\" : \""+ e.getMessage() + "\" }"
             );
         }
     }
@@ -77,7 +90,7 @@ public class UserController extends Controller {
         }
     }
 
-    // POST /weather
+    // POST /user
     public Response addUser(Request request) {
         try {
             List<User> userData = this.userDao.getAll();
@@ -98,6 +111,38 @@ public class UserController extends Controller {
 
             this.userDao.save(user);
 
+
+            return new Response(
+                    HttpStatus.CREATED,
+                    ContentType.JSON,
+                    "{ \"message\": \"Success\" }"
+            );
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            return new Response(
+                    HttpStatus.CONFLICT,
+                    ContentType.JSON,
+                    "{ \"message\": \""+ e.getMessage() + "\" }"
+            );
+        }
+
+        return new Response(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                ContentType.JSON,
+                "{ \"message\" : \"Internal Server Error\" }"
+        );
+    }
+
+    // PUT /user
+    public Response updateUser(Request request, User user) {
+        try {
+            User userChanged = this.getObjectMapper().readValue(request.getBody(), User.class);
+
+            if (userChanged.getName() != null )user.setName(userChanged.getName());
+            if (userChanged.getBio() != null )user.setBio(userChanged.getBio());
+            if (userChanged.getImage() != null )user.setImage(userChanged.getImage());
+            this.userDao.update(user);
 
             return new Response(
                     HttpStatus.CREATED,

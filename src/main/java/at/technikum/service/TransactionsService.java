@@ -1,6 +1,5 @@
 package at.technikum.service;
 
-import at.technikum.api.controller.DeckController;
 import at.technikum.api.controller.PackageController;
 import at.technikum.api.controller.SessionController;
 import at.technikum.httpserver.http.ContentType;
@@ -10,18 +9,13 @@ import at.technikum.httpserver.server.Request;
 import at.technikum.httpserver.server.Response;
 import at.technikum.httpserver.server.Service;
 
-import java.util.Objects;
-import java.util.UUID;
-
-public class PackageService implements Service {
+public class TransactionsService implements Service {
     private final SessionController sessionController;
     private final PackageController packageController;
-    private final DeckController deckController;
 
-    public PackageService() {
+    public TransactionsService() {
         this.sessionController = new SessionController();
         this.packageController = new PackageController();
-        this.deckController = new DeckController();
     }
 
     @Override
@@ -55,17 +49,8 @@ public class PackageService implements Service {
                 } else if (request.getMethod() == Method.GET) {
                     //return this.sessionController.getWeatherPerRepository();
                     //return this.weatherController.getWeatherPerRepository();
-                } else if (request.getMethod() == Method.POST && request.getPathParts().size() == 1
-                        && request.getPathParts().get(0).equals("packages")) {
-                    if (Objects.equals(token, "admin-mtcgToken")) {
-                        return this.packageController.addPackage(request);
-                    }
-                    else {
-
-                    }
-                } else if (request.getMethod() == Method.POST && request.getPathParts().size() > 1
-                        && request.getPathParts().get(1).equals("packages")) {
-                    return this.deckController.addDeck(request);
+                } else if (request.getMethod() == Method.POST) {
+                    return this.packageController.addPackage(request);
                 }
             }
         }

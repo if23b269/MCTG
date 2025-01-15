@@ -116,6 +116,11 @@ public class SessionDao implements Dao<Session> {
     }
 
     @Override
+    public void update(Session session) {
+
+    }
+
+    @Override
     public void delete(Session session) {
         try ( PreparedStatement statement = DbConnection.getInstance().prepareStatement("""
                 DELETE FROM sessions 

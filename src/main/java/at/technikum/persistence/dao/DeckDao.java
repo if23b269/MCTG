@@ -1,49 +1,79 @@
 package at.technikum.persistence.dao;
 
-import at.technikum.persistence.DbConnection;
+import at.technikum.DAL.DAO.Card;
+import at.technikum.DAL.DAO.Deck;
 import at.technikum.DAL.DAO.Package;
+import at.technikum.httpserver.server.Session;
+import at.technikum.persistence.DbConnection;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-public class PackageDao implements Dao<Package> {
+public class DeckDao implements Dao<Deck> {
     @Override
-    public Optional<Package> get(int id) {
+    public Optional<Deck> get(int id) {
+        try ( PreparedStatement statement = DbConnection.getInstance().prepareStatement("""
+                SELECT id, userid, token
+                FROM sessions 
+                WHERE id=?
+                """)
+        ) {
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            if(resultSet.next() ) {
+                return Optional.of(new Deck(
+                        resultSet.getLong(1),
+                        resultSet.getString( 2 )
+                ) );
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+
         return Optional.empty();
     }
 
     @Override
-    public List<Package> getAll() {
+    public List<Deck> getAll() {
         return List.of();
     }
 
     @Override
-    public void save(Package pkg) {
+    public void save(Deck deck) {
+
+    }
+
+    public void saveWithCards(Deck deck, List<Card> cards) throws SQLException {
         boolean success = false;
         try ( PreparedStatement statement = DbConnection.getInstance().prepareStatement("""
-                INSERT INTO packages
-                (id, price) 
-                VALUES (?, ?);
+                INSERT INTO decks
+                (name) 
+                VALUES (?);
                 """ )
         ) {
             // Auto-commit must be disabled to handle transactions manually
             DbConnection.getInstance().setAutoCommit(false);
 
-            statement.setString(1, pkg.getId());
-            statement.setDouble(2, pkg.getPrice());
+            statement.setString(1, deck.getName());
             //statement.execute();
             int affectedRows = statement.executeUpdate();
 
             if (affectedRows == 0) {
                 DbConnection.getInstance().rollback();
             }
-            //check if cards exits
 
-            // Insert associated cards using CardDao
             CardDao cardDao = new CardDao();
-            success = cardDao.insertCards(pkg.getCards(), pkg.getId()); // Insert cards for this package
+            for (Card card : cards) {
+                if(!cardDao.setDeckId(card, deck)) {
+                    success = false;
+                    break;
+                }
+                success = true;
+            }
 
             // If cards are successfully inserted, commit the transaction
             if (success) {
@@ -53,33 +83,33 @@ public class PackageDao implements Dao<Package> {
             }
         } catch (SQLException throwables) {
             DbConnection.getInstance().rollback();  // Rollback if there is any error
-            throwables.printStackTrace();
+            throw new SQLException(throwables);
         }
     }
 
 
     @Override
-    public void saveWithId(Package aPackage) {
+    public void saveWithId(Deck deck) {
 
     }
 
     @Override
-    public void update(Package aPackage, String[] params) {
+    public void update(Deck deck, String[] params) {
 
     }
 
     @Override
-    public void update(Package aPackage) {
+    public void update(Deck deck) {
 
     }
 
     @Override
-    public void delete(Package aPackage) {
+    public void delete(Deck deck) {
 
     }
 
     @Override
-    public Optional<Package> getByUsername(String username) {
+    public Optional<Deck> getByUsername(String uuid) {
         return Optional.empty();
     }
 

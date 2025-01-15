@@ -39,4 +39,20 @@ public class Response {
     public String toString() {
         return this.content;
     }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public int getStatus() {
+        return status;
+    }
 }

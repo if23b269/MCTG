@@ -10,17 +10,12 @@ import at.technikum.httpserver.server.Request;
 import at.technikum.httpserver.server.Response;
 import at.technikum.httpserver.server.Service;
 
-import java.util.Objects;
-import java.util.UUID;
-
-public class PackageService implements Service {
+public class DeckService implements Service {
     private final SessionController sessionController;
-    private final PackageController packageController;
     private final DeckController deckController;
 
-    public PackageService() {
+    public DeckService() {
         this.sessionController = new SessionController();
-        this.packageController = new PackageController();
         this.deckController = new DeckController();
     }
 
@@ -55,16 +50,7 @@ public class PackageService implements Service {
                 } else if (request.getMethod() == Method.GET) {
                     //return this.sessionController.getWeatherPerRepository();
                     //return this.weatherController.getWeatherPerRepository();
-                } else if (request.getMethod() == Method.POST && request.getPathParts().size() == 1
-                        && request.getPathParts().get(0).equals("packages")) {
-                    if (Objects.equals(token, "admin-mtcgToken")) {
-                        return this.packageController.addPackage(request);
-                    }
-                    else {
-
-                    }
-                } else if (request.getMethod() == Method.POST && request.getPathParts().size() > 1
-                        && request.getPathParts().get(1).equals("packages")) {
+                } else if (request.getMethod() == Method.POST ) {
                     return this.deckController.addDeck(request);
                 }
             }

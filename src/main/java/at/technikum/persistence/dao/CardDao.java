@@ -1,6 +1,7 @@
 package at.technikum.persistence.dao;
 
 import at.technikum.DAL.DAO.Card;
+import at.technikum.DAL.DAO.Deck;
 import at.technikum.persistence.DbConnection;
 
 import java.sql.*;
@@ -144,6 +145,11 @@ public class CardDao implements Dao<Card> {
     }
 
     @Override
+    public void update(Card card) {
+
+    }
+
+    @Override
     public void delete(Card card) {
         try ( PreparedStatement statement = DbConnection.getInstance().prepareStatement("""
                 DELETE FROM cards 
@@ -194,6 +200,29 @@ public class CardDao implements Dao<Card> {
 
             return true;
         }
+    }
+
+    public boolean setDeckId(Card card, Deck deck) throws SQLException {
+        String updateQuery = "UPDATE cards SET deck_id = ? WHERE id = ?";
+
+        try (PreparedStatement stmt = DbConnection.getInstance().prepareStatement(updateQuery)) {
+
+            // Set the parameters for the query
+            stmt.setLong(1, deck.getId());  // Set the new deck_id
+            stmt.setString(2, card.getId());   // Set the card_id to identify which card to update
+
+            // Execute the update statement
+            int rowsUpdated = stmt.executeUpdate();
+
+            if (rowsUpdated > 0) {
+                System.out.println("Deck ID(s) updated successfully!");
+                return true;
+            } else {
+                System.out.println("No card found with the specified ID.");
+            }
+
+        }
+        return false;
     }
 
     // Method to retrieve all cards associated with a package ID

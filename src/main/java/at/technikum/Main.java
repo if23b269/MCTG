@@ -1,6 +1,12 @@
 package at.technikum;
 
+import at.technikum.DAL.DAO.Card;
+import at.technikum.DAL.DAO.Deck;
 import at.technikum.DAL.DAO.User;
+import at.technikum.game.BattleLogic;
+import at.technikum.game.CardType;
+import at.technikum.game.ElementType;
+import at.technikum.game.MonsterType;
 import at.technikum.httpserver.server.Server;
 import at.technikum.httpserver.utils.Router;
 import at.technikum.persistence.dao.Dao;
@@ -10,6 +16,8 @@ import at.technikum.service.SessionService;
 import at.technikum.service.UserService;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class Main {
@@ -25,18 +33,20 @@ public class Main {
             //dao.save(new User(6,"John Doe", "pw"));
             //dao.save(new User(7,"admin", "istrator"));
 
-            User user1 = getUser(6);
-            System.out.println(user1);
+            User user01 = getUser(6);
+            //System.out.println(user01);
 
             //dao.update(user1, new String[]{"1","Max Musterfrau", "pw", "mySecret"});
             //System.out.println();
 
-            User user2 = getUser(2);
-            dao.delete(user2);
+            User user02 = getUser(2);
+            dao.delete(user02);
             //dao.save(new User(2,"Jane Doe", "pw", "mySecret"));
             dao.saveWithId(new User(2,"Jane Doe", "pw"));
 
-            dao.getAll().forEach(System.out::println);
+            //dao.getAll().forEach(System.out::println);
+
+
 
             server.start();
         } catch (IOException e) {
@@ -47,10 +57,10 @@ public class Main {
     private static Router configureRouter()
     {
         Router router = new Router();
-        UserService userService = new UserService();
-        router.addService("/users", userService);
-        router.addService("/sessions", new SessionService(userService));
-        router.addService("/packages", new PackageService(userService));
+        router.addService("/users", new UserService());
+        router.addService("/sessions", new SessionService());
+        router.addService("/packages", new PackageService());
+        router.addService("/transactions", new PackageService());
 
         return router;
     }

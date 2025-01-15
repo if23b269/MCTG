@@ -29,7 +29,6 @@ public class SessionController extends Controller {
     public Response addSession(Request request, List<User> users) {
         try {
 
-            // request.getBody() => "{ \"id\": 4, \"city\": \"Graz\", ... }
             User user = this.getObjectMapper().readValue(request.getBody(), User.class);
 
             if (!users.contains(user)) {
@@ -39,8 +38,7 @@ public class SessionController extends Controller {
                         "{ \"message\" : \"User not found\"}"
                 );
             }
-            //JSON Web Token
-            //String token = generateJWT(user.getUsername());
+
             String token = "mtcgToken";
             Session session = new Session(user, user.getUsername()+ "-" + token);
             this.sessionsessionHandler.addSession(session);

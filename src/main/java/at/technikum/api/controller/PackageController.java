@@ -81,23 +81,7 @@ public class PackageController extends Controller {
     // POST /package
     public Response addPackage(Request request) {
         try {
-            //List<Package> packageData = this.packageDao.getAll();
-            // request.getBody() => "{ \"id\": 4, \"city\": \"Graz\", ... }
-            //Package apackage = this.getObjectMapper().readValue(request.getBody(), Package.class);
             List<Card> cards = parseCardList(request.getBody());
-            //List<User> users = this.getUserDAL().getUserData();
-            //users.add(user);
-            /*for (int i = 0; i < users.size(); i++) {
-                System.out.println(users.get(i).getUsername());
-            }*/
-            /*UserData userData = this.getUserDAL();
-            userData.addUser(user);
-            userData.setUserData(userData.getUserData());
-            this.setUserDAL(userData);
-            if(packageData.contains(apackage)) {
-                throw new IllegalArgumentException("Package already exists");
-            }*/
-            //"1"+new Date().toString()
 
             if (cards.size() != 5) {
                 return new Response(

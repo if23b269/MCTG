@@ -149,23 +149,23 @@ public class UserDao implements Dao<User> {
 
     @Override
     public void update(User user, String[] params) {
+
+    }
+
+    @Override
+    public void update(User user) {
         // update the item
-        user.setId(Long.parseLong(Objects.requireNonNull( params[0], "ObjectId cannot be null" )));
-        user.setUsername(Objects.requireNonNull(params[1], "Username cannot be null"));
-        user.setPassword(Objects.requireNonNull(params[2], "Password cannot be null"));
-        //user.setToken(Objects.requireNonNull(params[3], "Token cannot be null"));
-        // persist the updated item
-        //                SET username = ?, password = ?, token = ?
         try ( PreparedStatement statement = DbConnection.getInstance().prepareStatement("""
                 UPDATE users 
-                SET username = ?, password = ?
+                SET username = ?, password = ?, bio = ?, image = ? 
                 WHERE id = ?;
                 """)
         ) {
             statement.setString(1, user.getUsername());
             statement.setString(2, user.getPassword());
-            //statement.setString(3, user.getToken());
-            statement.setLong(4, user.getId());
+            statement.setString(3, user.getBio());
+            statement.setString(4, user.getImage());
+            statement.setLong(5, user.getId());
             statement.execute();
         } catch (SQLException throwables) {
             throwables.printStackTrace();

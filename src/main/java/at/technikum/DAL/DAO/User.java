@@ -17,28 +17,47 @@ public class User {
     private String username;
     @JsonAlias({"Password"})
     private String password;
+    @JsonAlias({"Name"})
+    private String name;
     private int coins;
-    private List<Card> cards;
-    //private Deck deck;
-    private List<Card> stack;
+    private List<Package> packages;
+    private Deck deck;
+    //private List<Card> stack;
     private int elo;
+    @JsonAlias({"Bio"})
+    private String bio;
+    @JsonAlias({"Image"})
+    private String image;
 
     // Constructor
-    /*public User(String username, String password, int coins, List<Card> cards, Deck deck, List<Card> stack, int elo) {
+
+    public User(Long id, String username, String password, String name, int coins, Deck deck, int elo, String bio, String image) {
+        this.id = id;
         this.username = username;
         this.password = password;
+        this.name = name;
         this.coins = coins;
-        this.cards = cards;
         this.deck = deck;
-        this.stack = stack;
         this.elo = elo;
-    }*/
-    public User(String username, String password, int coins, List<Card> cards, List<Card> stack, int elo) {
+        this.bio = bio;
+        this.image = image;
+    }
+
+    /*public User(String username, String password, int coins, List<Card> cards, Deck deck, List<Card> stack, int elo) {
+            this.username = username;
+            this.password = password;
+            this.coins = coins;
+            this.cards = cards;
+            this.deck = deck;
+            this.stack = stack;
+            this.elo = elo;
+        }*/
+    public User(String username, String password, int coins, List<Package> packages, Deck deck, int elo) {
         this.username = username;
         this.password = password;
         this.coins = coins;
-        this.cards = cards;
-        this.stack = stack;
+        this.packages = packages;
+        this.deck = deck;
         this.elo = elo;
     }
     public User(String username, String password, int coins) {
@@ -89,14 +108,6 @@ public class User {
         this.coins = coins;
     }
 
-    public List<Card> getCards() {
-        return cards;
-    }
-
-    public void setCards(List<Card> cards) {
-        this.cards = cards;
-    }
-
     /*public Deck getDeck() {
         return deck;
     }
@@ -104,14 +115,6 @@ public class User {
     public void setDeck(Deck deck) {
         this.deck = deck;
     }*/
-
-    public List<Card> getStack() {
-        return stack;
-    }
-
-    public void setStack(List<Card> stack) {
-        this.stack = stack;
-    }
 
     public int getElo() {
         return elo;
